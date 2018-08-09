@@ -1,11 +1,14 @@
+A) Accounts etc.
+-Github.com Account
+
 1)Allgemein benötigte Programme
 -Ordentlichen Texteditor, z.B. Notepad++ (https://notepad-plus-plus.org/download/v7.5.8.html): ist generell nützlich sollte man etwas ohne Entwicklungsumgebung schnell ändern müssen
--Git (https://git-scm.com/downloads): Vorraussettzung für Github Desktop
--Github Desktop (https://desktop.github.com/): Versionsmanagement-Tool für Softwareentwicklung
+-Git (https://git-scm.com/downloads): Vorraussettzung für GitKraken
+-GitKraken (https://www.gitkraken.com/): Versionsmanagement-Tool für Softwareentwicklung
 
 1.1) Requirements Frontend (Android App)
 -Android Studio (https://developer.android.com/studio/): Entwicklungsumgebung für Android Apps
--(für Geräte-Emulation, nur möglich mit Prozessoren mit VT-x Support) Itel HAXM Drivers (https://software.intel.com/en-us/articles/intel-hardware-accelerated-execution-manager-intel-haxm): Notwendig für die Emulation von Android-Geräten
+-(für Geräte-Emulation, nur möglich mit Prozessoren mit VT-x Support) Itel HAXM Drivers (https://software.intel.com/en-us/articles/intel-hardware-accelerated-execution-manager-intel-haxm): Notwendig für die Emulation von Android-Geräten. VT-x muss im BIOS aktiviert sein!
 
 1.2) Requirements Backend (Server)
 -Beliebige Entwicklungsumgebung für Java (z.B. Eclipse oder NetBeans)
