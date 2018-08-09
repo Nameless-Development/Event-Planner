@@ -13,13 +13,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
  *
  * @author Admin
  */
-@Path("Test")
+@Path("/Test")
 public class TestResource {
 
     @Context
@@ -36,10 +37,10 @@ public class TestResource {
      * @return an instance of java.lang.String
      */
     @GET
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.TEXT_XML)
     public String getXml() {
         //TODO return proper representation object
-        throw new UnsupportedOperationException();
+        return "This works. a bit";
     }
 
     /**
@@ -47,7 +48,7 @@ public class TestResource {
      * @param content representation for the resource
      */
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.TEXT_XML)
     public void putXml(String content) {
     }
 }
