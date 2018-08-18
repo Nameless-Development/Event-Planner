@@ -1,3 +1,55 @@
-/Server/dist/
-/Server/build/
+## General
+
+# Java class files
+*.class
+
+# Log Files
+*.log
+
+## Server
+
+# Built Projects
+Server/dist/
+Server/build/
+
 Server/nbproject/private/
+
+## Client
+
+# Built application files
+*.apk
+*.ap_
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Generated files
+Client/bin/
+Client/gen/
+Client/out/
+
+# Gradle files
+Client/.gradle/
+Client/build/
+
+# Local config
+Client/local.properties
+
+# Android Studio Navigation editor temp files
+Client/.navigation/
+
+# Android Studio captures folder
+Client/captures/
+
+# IntelliJ
+*.iml
+Client/.idea/workspace.xml
+Client/.idea/tasks.xml
+Client/.idea/gradle.xml
+Client/.idea/assetWizardSettings.xml
+Client/.idea/dictionaries
+Client/.idea/libraries
+Client/.idea/caches
+
+# External native build folder generated in Android Studio 2.2 and later
+Client/.externalNativeBuild
