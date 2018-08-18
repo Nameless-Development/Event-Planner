@@ -12,7 +12,7 @@ import javax.ws.rs.core.Application;
  *
  * @author Admin
  */
-@javax.ws.rs.ApplicationPath("")
+@javax.ws.rs.ApplicationPath("eps")
 public class ApplicationConfig extends Application {
 
     @Override

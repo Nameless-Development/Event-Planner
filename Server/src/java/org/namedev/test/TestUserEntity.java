@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tbl_user")
 @NamedQueries({
-    @NamedQuery(name = "TestUser.findbyId", query = "SELECT tu FROM TestUser tu WHERE tu.id LIKE :id")
+    @NamedQuery(name = "TestUserEntity.findbyId", query = "SELECT tu FROM TestUserEntity tu WHERE tu.id LIKE :id")
 })
 public class TestUserEntity implements Serializable {
 

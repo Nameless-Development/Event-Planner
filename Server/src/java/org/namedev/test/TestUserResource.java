@@ -17,13 +17,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import lib.db.controller.Controller;
+import org.namedev.XmlSerializable;
 
 /**
  * REST Web Service
  *
  * @author Max
  */
-@Path("/Test")
+@Path("/TestUser")
 public class TestUserResource {
 
     private final Controller<TestUserEntity> controller;
@@ -35,8 +36,23 @@ public class TestUserResource {
      * Creates a new instance of TestResource
      */
     public TestUserResource() {
-        controller = new Controller<>("MDB_PU", TestUserEntity.class);
+        controller = new Controller<>("EPS-PU", TestUserEntity.class);
     }
     
-    
+    @PUT
+    @Path("/create")
+    public Response createTestUser(@FormParam("username") String username){
+        TestUserEntity user = new TestUserEntity();
+        user.setUsername(username);
+        
+        try{
+            controller.insert(user);
+        } catch(Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+        return Response
+                .status(Response.Status.CREATED)
+                .entity(XmlSerializable.getXmlStream().toXML(user))
+                .build();
+    }
 }
