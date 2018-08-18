@@ -35,7 +35,7 @@ public class TestResource {
     }
 
     /**
-     * Retrieves representation of an instance of org.nameless_dev.test.TestResource
+     * Retrieves representation of an instance of org.namedev.test.TestResource
      * @return an instance of java.lang.String
      */
     @GET
