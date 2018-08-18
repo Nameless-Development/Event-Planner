@@ -9,16 +9,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
  *
- * @author Admin
+ * @author Max
  */
 @Path("/Test")
 public class TestResource {
@@ -40,7 +42,7 @@ public class TestResource {
     @Produces(MediaType.TEXT_XML)
     public String getXml() {
         //TODO return proper representation object
-        return "This works. a bit";
+        return "<text>This works. a bit</text>";
     }
 
     /**
@@ -50,5 +52,14 @@ public class TestResource {
     @PUT
     @Consumes(MediaType.TEXT_XML)
     public void putXml(String content) {
+    }
+    
+    @GET
+    @Path("/ping")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String ping(@QueryParam("from") String from){
+        System.err.println(from+": Ping recieved");
+        return from+": Ping recieved";
     }
 }
