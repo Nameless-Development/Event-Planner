@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.nameless_dev.test;
+package org.namedev.test;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
