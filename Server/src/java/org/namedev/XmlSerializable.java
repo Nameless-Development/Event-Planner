@@ -25,7 +25,7 @@ public interface XmlSerializable {
     public static XStream getXmlStream(){
         XStream stream = new XStream(new StaxDriver());
         
-        stream.alias("test_user", TestUserEntity.class);
+        stream.alias("TestUser", TestUserEntity.class);
         
         //variables which are saved as attributes instead of fields
         stream.useAttributeFor(TestUserEntity.class, "id");
