@@ -8,7 +8,7 @@ package org.namedev;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
-import org.namedev.test.TestUserEntity;
+import org.namedev.entity.User;
 
 /**
  * An Interface that all Entity classes that are supposed to be transferred between Client and Server
@@ -25,10 +25,10 @@ public interface XmlSerializable {
     public static XStream getXmlStream(){
         XStream stream = new XStream(new StaxDriver());
         
-        stream.alias("TestUser", TestUserEntity.class);
+        stream.alias("user", User.class);
         
         //variables which are saved as attributes instead of fields
-        stream.useAttributeFor(TestUserEntity.class, "id");
+        stream.useAttributeFor(User.class, "id");
         
         return stream;
     }

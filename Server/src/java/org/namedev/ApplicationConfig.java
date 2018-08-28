@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.namedev.test;
+package org.namedev;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -30,7 +30,6 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(org.namedev.resource.UserResource.class);
-    resources.add(org.namedev.test.TestUserResource.class);
     }
     
 }

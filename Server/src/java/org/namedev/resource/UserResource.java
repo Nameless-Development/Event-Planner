@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
 import lib.db.controller.Controller;
 import lib.db.controller.Pair;
 import org.namedev.entity.User;
-import org.namedev.test.TestUserEntity;
 
 /**
  * REST Web Service
