@@ -6,6 +6,7 @@
 package org.namedev.test;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,13 +15,15 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
  * @author Max
  */
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "not_tbl_user")
 @NamedQueries({
   @NamedQuery(name = "TestUserEntity.findbyId", query = "SELECT tu FROM TestUserEntity tu WHERE tu.id LIKE :id"),
   @NamedQuery(name = "TestUserEntity.update", query = "UPDATE TestUserEntity tu SET tu.username = :username WHERE tu.id LIKE :id")

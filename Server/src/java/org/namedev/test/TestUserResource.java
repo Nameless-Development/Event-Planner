@@ -61,7 +61,7 @@ public class TestUserResource {
   @Path("/update/{id}")
   @Produces(MediaType.TEXT_XML)
   public Response updateTestUser(@PathParam("id") Long id, @FormParam("username") String username) {
-    TestUserEntity user = controller.querySingle("Person.findById", new Pair("id", id));
+    TestUserEntity user = controller.querySingle("TestUserEntity.findById", new Pair("id", id));
 
     if (user == null) {
       return Response.status(Response.Status.NOT_FOUND).build();
@@ -69,7 +69,7 @@ public class TestUserResource {
 
     user.setUsername(username);
 
-    if (controller.update("Person.update", user)) {
+    if (controller.update("TestUserEntity.update", user)) {
       return Response.status(Response.Status.OK).build();
     } else {
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -80,7 +80,7 @@ public class TestUserResource {
   @Path("/delete/{id}")
   @Produces(MediaType.TEXT_XML)
   public Response deleteTestUser(@PathParam("id") Long id) {
-    TestUserEntity user = controller.querySingle("Person.findById", new Pair("id", id));
+    TestUserEntity user = controller.querySingle("TestUserEntity.findById", new Pair("id", id));
 
     if (user == null) {
       return Response.status(Response.Status.NOT_FOUND).build();
