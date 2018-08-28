@@ -12,8 +12,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -21,6 +26,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tbl_user")
+@NamedQueries({
+  @NamedQuery(name = "User.findbyId", query = "SELECT u FROM User u WHERE u.id LIKE :id"),
+  @NamedQuery(name = "User.update", query = "UPDATE User u SET u.username = :username WHERE u.id LIKE :id")
+})
+@XmlRootElement
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -42,8 +52,8 @@ public class User implements Serializable {
   @Column(name = "user_pwd_hash")
   private String pwd_hash;
   
-  @Column(name = "user_master")
-  @ManyToOne
+  @JoinColumn(name = "user_master")
+  @OneToOne
   private User master;
   
   public Long getId() {
