@@ -52,8 +52,7 @@ public class User implements Serializable {
   @Column(name = "user_pwd_hash")
   private String pwd_hash;
   
-  @JoinColumn(name = "user_master")
-  @OneToOne
+  @ManyToOne
   private User master;
   
   public Long getId() {
