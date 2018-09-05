@@ -41,14 +41,33 @@ public class UserResource {
   public UserResource() {
     controller = new Controller<>("EPS-PU", User.class);
   }
-
-    @PUT
-  @Path("/create")
+  
+  /*
+  @GET
+  @Path("/getById/{id}")
   @Produces(MediaType.TEXT_XML)
-  public Response createUser(@FormParam("username") String username) {
+  public Response getUserById(@PathParam("id") Long id){
+    
+  }
+  */
+  @PUT
+  @Path("/create")
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response createUser(@FormParam("email") String email,
+                             @FormParam("username") String username,
+                             @FormParam("pwd_hash") String hash,
+                             @FormParam("user_master") long master_id) {
     User user = new User();
     user.setUsername(username);
-
+    user.setEmail(email);
+    user.setEmail_confirmed_at(null);
+    user.setPwd_hash(hash);
+    
+    if(master_id != -404){
+      User master = controller.querySingle("User.findById", new Pair("id", master_id));
+      user.setMaster(master);
+    }
+    
     try {
       controller.insert(user);
     } catch (Exception ex) {
@@ -56,6 +75,7 @@ public class UserResource {
     }
     return Response
             .status(Response.Status.CREATED)
+            .entity(user.getId())
             .build();
   }
 
@@ -71,18 +91,22 @@ public class UserResource {
 
     user.setUsername(username);
 
-    if (controller.update("TestUserEntity.update", user)) {
+    
+    if (controller.update("User.update", user)) {
       return Response.status(Response.Status.OK).build();
     } else {
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
+    
   }
 
   @DELETE
   @Path("/delete/{id}")
   @Produces(MediaType.TEXT_XML)
-  public Response deleteUser(@PathParam("id") Long id) {
-    User user = controller.querySingle("TestUserEntity.findById", new Pair("id", id));
+  public Response deleteUser(@PathParam("id") long id) {
+    System.out.println("Deleting user "+id);
+    System.out.flush();
+    User user = controller.querySingle("User.findById", new Pair("id", id));
 
     if (user == null) {
       return Response.status(Response.Status.NOT_FOUND).build();
@@ -91,7 +115,9 @@ public class UserResource {
     try {
       controller.delete(user);
     } catch (Exception ex) {
-      Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+      ex.printStackTrace();
+      System.out.flush();
+      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
     return Response.status(Response.Status.OK).build();
   }
@@ -114,5 +140,6 @@ public class UserResource {
   @PUT
   @Consumes(MediaType.APPLICATION_XML)
   public void putXml(String content) {
+    throw new UnsupportedOperationException();
   }
 }
