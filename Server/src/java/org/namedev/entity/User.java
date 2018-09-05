@@ -10,6 +10,7 @@ import java.sql.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 /**
  *
@@ -36,7 +38,6 @@ public class User implements Serializable {
   
   @Id
   @Column(name = "user_id")
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "tbl_user")
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
@@ -53,7 +54,7 @@ public class User implements Serializable {
   private String pwd_hash;
   
   @ManyToOne
-  @JoinColumn(name = "user_master", referencedColumnName = "user_id")
+  @JoinColumn(name = "user_master")
   private User master;
   
   public long getId() {
@@ -106,8 +107,7 @@ public class User implements Serializable {
   
   //TODO actual representation
   public String toString(){
-    String ret = super.toString();
-    ret += "[Id = "+id+", email = "+email+", username = "+username+"]";
+    String ret = "User "+id+" [email = "+email+", username = "+username+"]";
     return ret;
   }
 }
