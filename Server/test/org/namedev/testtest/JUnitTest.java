@@ -6,10 +6,8 @@
 package org.namedev.testtest;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.eclipse.persistence.jpa.jpql.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
