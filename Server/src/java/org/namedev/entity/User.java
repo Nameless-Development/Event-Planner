@@ -30,10 +30,16 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 @Entity
 @Table(name = "tbl_user")
 @NamedQueries({
-  @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id LIKE :id")
+  @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id LIKE :id"),
+  @NamedQuery(name = "User.findByMaster", query = "SELECT u FROM User u WHERE u.master LIKE :master")
 })
 public class User implements Serializable {
-
+  
+  /**
+   * This password hash is not obtainable by normal creation and is used to identify users created by UnitTests (thus allowing to remove all of them with ease)
+   */
+  public static final String TEST_PASSWORD = "THIS_IS_A_TEST_PASSWORD_FROM_TEST";
+  
   private static final long serialVersionUID = 1L;
   
   @Id
@@ -107,7 +113,11 @@ public class User implements Serializable {
   
   //TODO actual representation
   public String toString(){
-    String ret = "User "+id+" [email = "+email+", username = "+username+"]";
+    String master_id = null;
+    if(master != null){
+      master_id = Long.toString(master.getId());
+    }
+    String ret = "User "+id+" [email = "+email+", username = "+username+", pwd_hash = "+pwd_hash+", master = "+master_id+"]";
     return ret;
   }
 }

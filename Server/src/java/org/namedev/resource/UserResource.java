@@ -5,8 +5,12 @@
  */
 package org.namedev.resource;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
+import com.sun.istack.internal.Nullable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -20,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import lib.db.controller.Controller;
 import lib.db.controller.Pair;
+import org.namedev.DatabaseResource;
 import org.namedev.entity.User;
 
 /**
@@ -28,35 +33,20 @@ import org.namedev.entity.User;
  * @author Max <Max at Nameless Development>
  */
 @Path("/User")
-public class UserResource {
-
-  private final Controller<User> controller;
+public class UserResource extends DatabaseResource{
   
-  @Context
-  private UriInfo context;
-
-  /**
-   * Creates a new instance of UserResource
-   */
-  public UserResource() {
-    controller = new Controller<>("EPS-PU", User.class);
-  }
   
-  /*
-  @GET
-  @Path("/getById/{id}")
-  @Produces(MediaType.TEXT_XML)
-  public Response getUserById(@PathParam("id") Long id){
-    
-  }
-  */
   @PUT
   @Path("/create")
   @Produces(MediaType.TEXT_PLAIN)
   public Response createUser(@FormParam("email") String email,
                              @FormParam("username") String username,
                              @FormParam("pwd_hash") String hash,
-                             @FormParam("user_master") long master_id) {
+                             @FormParam("user_master") @Nullable long master_id) {
+    connect();
+    entman.getTransaction().begin();
+    
+    
     User user = new User();
     user.setUsername(username);
     user.setEmail(email);
@@ -64,21 +54,27 @@ public class UserResource {
     user.setPwd_hash(hash);
     
     if(master_id != -404){
-      User master = controller.querySingle("User.findById", new Pair("id", master_id));
+      Query q = entman.createQuery("SELECT u FROM User u WHERE u.id LIKE :master_id");
+      q.setParameter("master_id", master_id);
+      User master = (User) q.getSingleResult();
       user.setMaster(master);
     }
     
     try {
-      controller.insert(user);
+      entman.persist(user);
+      entman.getTransaction().commit();
+      return Response
+        .status(Response.Status.CREATED)
+        .entity(user.getId())
+        .build();
     } catch (Exception ex) {
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    } finally {
+      entman.close();
     }
-    return Response
-            .status(Response.Status.CREATED)
-            .entity(user.getId())
-            .build();
-  }
 
+  }
+/*
   @POST
   @Path("/update/{id}")
   @Produces(MediaType.TEXT_XML)
@@ -99,47 +95,60 @@ public class UserResource {
     }
     
   }
-
+*/
   @DELETE
   @Path("/delete/{id}")
   @Produces(MediaType.TEXT_XML)
   public Response deleteUser(@PathParam("id") long id) {
-    System.out.println("Deleting user "+id);
-    System.out.flush();
-    User user = controller.querySingle("User.findById", new Pair("id", id));
-
+    connect();
+    entman.getTransaction().begin();
+    User user = findUserById(id);
+    
     if (user == null) {
+      entman.close();
       return Response.status(Response.Status.NOT_FOUND).build();
     }
-
+    
+    List<User> slaves = findSlavesOfUser(id);
+    
     try {
-      controller.delete(user);
+      for(User s: slaves){
+        entman.persist(s);
+        entman.remove(s);
+      }
+      entman.persist(user);
+      entman.remove(user);
+      entman.getTransaction().commit();
+      return Response.status(Response.Status.OK).build();
     } catch (Exception ex) {
       ex.printStackTrace();
-      System.out.flush();
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    } finally{
+      entman.close();
     }
-    return Response.status(Response.Status.OK).build();
   }
   
-  /**
-   * Retrieves representation of an instance of org.namedev.resource.UserResource
-   * @return an instance of java.lang.String
-   */
-  @GET
-  @Produces(MediaType.APPLICATION_XML)
-  public String getXml() {
-    //TODO return proper representation object
-    throw new UnsupportedOperationException();
+  private User findUserById(long id){
+    System.out.println("Searching for User"+id);
+    Query q = entman.createQuery("SELECT u FROM User u WHERE u.id LIKE :id");
+    q.setParameter("id", id);
+    User ret = (User) q.getSingleResult();
+    return ret;
   }
-
-  /**
-   * PUT method for updating or creating an instance of UserResource
-   * @param content representation for the resource
-   */
-  @PUT
-  @Consumes(MediaType.APPLICATION_XML)
-  public void putXml(String content) {
-    throw new UnsupportedOperationException();
+  
+  private List<User> findSlavesOfUser(long id){
+    User master = findUserById(id);
+    Query q = entman.createQuery("SELECT u FROM User u WHERE u.master = :master");
+    q.setParameter("master", master);
+    List<User> ret = q.getResultList();
+    return ret;
+  }
+  
+  public List<User> findAllTestUsers(){
+    connect();
+    Query q = entman.createQuery("SELECT u FROM User u WHERE u.pwd_hash = :pwd");
+    q.setParameter("pwd", User.TEST_PASSWORD);
+    List<User> ret = q.getResultList();
+    return ret;
   }
 }

@@ -7,6 +7,7 @@ package org.namedev.testtest;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.core.Response;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.eclipse.persistence.jpa.jpql.Assert;
@@ -24,7 +25,6 @@ import org.namedev.resource.UserResource;
  */
 public class JUnitTest {
   
-  private static ArrayList<User> users;
   private static UserResource ur;
   
   public JUnitTest() {
@@ -33,7 +33,6 @@ public class JUnitTest {
   @BeforeClass
   public static void setUpClass() {
     ur = new UserResource();
-    users = new ArrayList<User>();
   }
   
   @Before
@@ -45,7 +44,7 @@ public class JUnitTest {
     User u = new User();
     u.setUsername("TestMasterUser");
     u.setEmail("testuser@namedev.org");
-    u.setPwd_hash("5F4DCC3B5AA765D61D8327DEB882CF99");
+    u.setPwd_hash(User.TEST_PASSWORD);
     u.setEmail_confirmed_at(new Date(118, 6, 12));
     
     Response master_ret = ur.createUser(u.getEmail(), u.getUsername(), u.getPwd_hash(), -404);
@@ -56,7 +55,6 @@ public class JUnitTest {
     
     u.setId((long) master_ret.getEntity());
     
-    users.add(u);
     
     Response slave_ret = createSlaveUserTest(u);
     
@@ -73,22 +71,14 @@ public class JUnitTest {
     
     Response slave_ret = ur.createUser(null, u.getUsername(), null, master.getId());
     
-    u.setId((long)slave_ret.getEntity());
-    
-    users.add(u);
-    
     return slave_ret;
   }
   
   @Test
-  public void deleteMasterAndSlaveUserTest(){
-    User[] user_arr = users.toArray(new User[0]);
-    for(User user: user_arr){
-      long id = user.getId();
-      Response ret = ur.deleteUser(user.getId());
-      if(ret.getStatus() >= 400){
-        Assert.fail("Got a Response with code "+ret.getStatus());
-      }
+  public void deleteUserTest(){
+    List<User> test_users = ur.findAllTestUsers();
+    for(User u: test_users){
+      ur.deleteUser(u.getId());
     }
   }
   
